@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVRIX Streetwear Mega Store</title>
+<style>
+/* RESET */
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Arial',sans-serif;}
+body {background:#000;color:#fff;overflow-x:hidden;}
+
+/* NAVBAR */
+header {display:flex;justify-content:space-between;align-items:center;padding:20px 50px;background:#000;border-bottom:1px solid #222;position:sticky;top:0;z-index:10;}
+.logo {font-size:28px;font-weight:bold;letter-spacing:2px;}
+nav {display:flex;align-items:center;}
+nav a {color:#fff;text-decoration:none;margin-left:25px;font-weight:500;transition:0.3s;}
+nav a:hover {color:#ccc;}
+.dropdown {position:relative;}
+.dropdown-content {display:none;position:absolute;top:100%;left:0;background:#111;min-width:150px;border-radius:5px;overflow:hidden;z-index:10;}
+.dropdown-content a {display:block;padding:10px;color:#fff;}
+.dropdown-content a:hover {background:#222;}
+.dropdown:hover .dropdown-content {display:block;}
+
+/* HERO */
+.hero {height:80vh;background:url('https://images.unsplash.com/photo-1589984727360-cd8046ff5c90?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;padding:0 20px;}
+.hero h1 {font-size:60px;margin-bottom:20px;letter-spacing:3px;animation:fadeInDown 1s ease forwards;}
+.hero p {font-size:20px;margin-bottom:30px;opacity:0;animation:fadeInUp 1s 0.7s forwards;}
+.hero button {padding:15px 40px;background:#fff;color:#000;border:none;font-weight:bold;cursor:pointer;opacity:0;animation:fadeInUp 1s 1s forwards;}
+.hero button:hover {background:#ccc;}
+
+/* SECTIONS */
+section {padding:80px 50px;}
+section h2 {font-size:36px;margin-bottom:40px;text-align:center;letter-spacing:2px;}
+
+/* PRODUCTS GRID */
+.products {display:flex;flex-wrap:wrap;gap:30px;justify-content:center;transition:all 0.5s ease;}
+.product-card {background:#111;padding:20px;width:250px;border-radius:8px;text-align:center;transition:0.5s;cursor:pointer;opacity:1;transform:scale(1);}
+.product-card.hide {opacity:0;transform:scale(0.7);pointer-events:none;transition:0.5s;}
+.product-card img {width:100%;border-radius:8px;margin-bottom:15px;transition:0.3s;}
+.product-card:hover img {transform:scale(1.08);}
+.product-card h3 {margin-bottom:10px;}
+.product-card p {margin-bottom:10px;font-weight:bold;}
+.product-card button {padding:10px 20px;background:#fff;color:#000;border:none;font-weight:bold;cursor:pointer;transition:0.3s;}
+.product-card button:hover {background:#ccc;}
+
+/* SLIDER */
+.slider-container {position:relative;margin-bottom:50px;}
+.slider {display:flex;overflow-x:auto;gap:20px;padding-bottom:20px;scroll-behavior:smooth;}
+.slider::-webkit-scrollbar {display:none;}
+.slider-card {min-width:250px;background:#111;border-radius:8px;padding:15px;text-align:center;flex-shrink:0;transition:0.3s;}
+.slider-card img {width:100%;border-radius:8px;margin-bottom:10px;}
+.slider-arrow {position:absolute;top:50%;transform:translateY(-50%);background:#fff;color:#000;border:none;font-size:24px;padding:10px;cursor:pointer;border-radius:50%;opacity:0.8;}
+.slider-arrow:hover {opacity:1;}
+#prev {left:-20px;}
+#next {right:-20px;}
+
+/* MODAL */
+.modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:20;}
+.modal-content {background:#111;padding:30px;border-radius:8px;width:90%;max-width:500px;text-align:center;position:relative;}
+.close {position:absolute;top:10px;right:15px;color:#fff;font-size:24px;cursor:pointer;}
+.modal-content img {width:80%;border-radius:8px;margin-bottom:20px;}
+.modal-content button {padding:10px 20px;background:#fff;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:15px;}
+.modal-content button:hover {background:#ccc;}
+
+/* FOOTER */
+footer {background:#111;text-align:center;padding:40px 20px;font-size:14px;color:#aaa;margin-top:50px;}
+
+/* ANIMATIONS */
+@keyframes fadeInDown {from {opacity:0;transform:translateY(-50px);} to {opacity:1;transform:translateY(0);}}
+@keyframes fadeInUp {from {opacity:0;transform:translateY(50px);} to {opacity:1;transform:translateY(0);}}
+@keyframes flyToCart {0% {transform:translate(0,0) scale(1);} 100% {transform:translate(300px,-500px) scale(0.2);opacity:0;}}
+
+/* RESPONSIVE */
+@media(max-width:768px){.hero h1{font-size:40px;} .product-card{width:45%;} .slider-card{min-width:200px;}}
+@media(max-width:480px){.product-card{width:100%;} nav a{margin-left:15px;font-size:12px;} .slider-card{min-width:180px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AVRIX</div>
+  <nav>
+    <a href="#">Home</a>
+    <div class="dropdown"><a href="#">Categories ▼</a>
+      <div class="dropdown-content">
+        <a href="#" data-category="all">All</a>
+        <a href="#" data-category="tracksuits">Tracksuits</a>
+        <a href="#" data-category="hoodies">Hoodies</a>
+        <a href="#" data-category="jackets">Jackets</a>
+        <a href="#" data-category="t-shirts">T-Shirts</a>
+        <a href="#" data-category="shoes">Shoes</a>
+        <a href="#" data-category="accessories">Accessories</a>
+      </div>
+    </div>
+    <a href="#">New Drop</a>
+    <a href="#">About</a>
+    <a href="#" id="cartBtn">Cart</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Built for the streets. Designed for confidence.</h1>
+  <p>Premium urban streetwear for bold individuals.</p>
+  <button onclick="alert('Shop Now clicked!')">Shop Now</button>
+</section>
+
+<section>
+<h2>New Arrivals</h2>
+<div class="slider-container">
+  <button id="prev" class="slider-arrow">&#10094;</button>
+  <div class="slider" id="newArrivals">
+    <!-- Add 10 slider products -->
+    <!-- Example -->
+    <div class="slider-card" data-category="tracksuits"><img src="https://images.unsplash.com/photo-1602810317307-5efb7c5461ab?auto=format&fit=crop&w=400&q=80"><h4>Black Tracksuit</h4><p>$120</p><button onclick="addToCartAnimated('Black Tracksuit',120,this)">Add</button></div>
+    <div class="slider-card" data-category="hoodies"><img src="https://images.unsplash.com/photo-1600181955050-15a6a5d69e21?auto=format&fit=crop&w=400&q=80"><h4>Grey Hoodie</h4><p>$85</p><button onclick="addToCartAnimated('Grey Hoodie',85,this)">Add</button></div>
+    <div class="slider-card" data-category="shoes"><img src="https://images.unsplash.com/photo-1587031617751-5a3c0581185d?auto=format&w=400&q=80"><h4>Black Shoes</h4><p>$150</p><button onclick="addToCartAnimated('Black Shoes',150,this)">Add</button></div>
+    <div class="slider-card" data-category="jackets"><img src="https://images.unsplash.com/photo-1618354697740-8ee7e7d4ce5a?auto=format&w=400&q=80"><h4>Puffer Jacket</h4><p>$150</p><button onclick="addToCartAnimated('Puffer Jacket',150,this)">Add</button></div>
+    <!-- Repeat for more -->
+  </div>
+  <button id="next" class="slider-arrow">&#10095;</button>
+</div>
+</section>
+
+<section>
+<h2>All Products</h2>
+<div class="products" id="allProducts">
+<!-- 50+ products -->
+<!-- Example products -->
+<div class="product-card" data-category="tracksuits"><img src="https://images.unsplash.com/photo-1602810317307-5efb7c5461ab?auto=format&fit=crop&w=400&q=80"><h3>Black Tracksuit</h3><p>$120</p><button onclick="addToCartAnimated('Black Tracksuit',120,this)">Add to Cart</button></div>
+<div class="product-card" data-category="tracksuits"><img src="https://images.unsplash.com/photo-1618354697740-8ee7e7d4ce5a?auto=format&w=400&q=80"><h3>Beige Tracksuit</h3><p>$125</p><button onclick="addToCartAnimated('Beige Tracksuit',125,this)">Add to Cart</button></div>
+<div class="product-card" data-category="hoodies"><img src="https://images.unsplash.com/photo-1600181955050-15a6a5d69e21?auto=format&w=400&q=80"><h3>Grey Hoodie</h3><p>$85</p><button onclick="addToCartAnimated('Grey Hoodie',85,this)">Add to Cart</button></div>
+<div class="product-card" data-category="jackets"><img src="https://images.unsplash.com/photo-1618354697740-8ee7e7d4ce5a?auto=format&w=400&q=80"><h3>Puffer Jacket</h3><p>$150</p><button onclick="addToCartAnimated('Puffer Jacket',150,this)">Add to Cart</button></div>
+<div class="product-card" data-category="t-shirts"><img src="https://images.unsplash.com/photo-1600181955050-15a6a5d69e21?auto=format&w=400&q=80"><h3>Graphic T-Shirt</h3><p>$50</p><button onclick="addToCartAnimated('Graphic T-Shirt',50,this)">Add to Cart</button></div>
+<div class="product-card" data-category="shoes"><img src="https://images.unsplash.com/photo-1587031617751-5a3c0581185d?auto=format&w=400&q=80"><h3>Black Shoes</h3><p>$150</p><button onclick="addToCartAnimated('Black Shoes',150,this)">Add to Cart</button></div>
+<div class="product-card" data-category="accessories"><img src="https://images.unsplash.com/photo-1618354697740-8ee7e7d4ce5a?auto=format&w=400&q=80"><h3>Cap</h3><p>$30</p><button onclick="addToCartAnimated('Cap',30,this)">Add to Cart</button></div>
+
+<!-- Repeat until 50+ products for full store -->
+</div>
+</section>
+
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+  <div class="modal-content">
+    <span class="close" id="closeCart">&times;</span>
+    <h2>Your Cart</h2>
+    <div id="cartItems">No items in cart.</div>
+    <p id="cartTotal"></p>
+    <button onclick="checkout()">Checkout</button>
+  </div>
+</div>
+
+<footer>&copy; 2026 AVRIX Streetwear. All Rights Reserved.</footer>
+
+<script>
+// CART
+let cart = [];
+function addToCart(name,price){cart.push({name,price});updateCart();}
+function addToCartAnimated(name,price,btn){
+  const img=btn.parentElement.querySelector('img');
+  const clone=img.cloneNode(true);
+  const rect=img.getBoundingClientRect();
+  clone.style.position='fixed'; clone.style.left=rect.left+'px'; clone.style.top=rect.top+'px'; clone.style.width=rect.width+'px'; clone.style.height=rect.height+'px'; clone.style.zIndex=50; clone.style.transition='all 0.8s ease-in-out';
+  document.body.appendChild(clone);
+  setTimeout(()=>{clone.style.transform='translate(300px,-500px) scale(0.2)'; clone.style.opacity='0';},50);
+  setTimeout(()=>{document.body.removeChild(clone); addToCart(name,price);},850);
+}
+function updateCart(){
+  const cartItems=document.getElementById('cartItems');
+  const total=document.getElementById('cartTotal');
+  if(cart.length===0){cartItems.innerHTML='No items in cart.';total.innerHTML='';}
+  else{
+    cartItems.innerHTML='';let sum=0;
+    cart.forEach(item=>{const div=document.createElement('div');div.className='cart-item';div.innerText=item.name+' - $'+item.price;cartItems.appendChild(div);sum+=item.price;});
+    total.innerHTML='Total: $'+sum;
+  }
+}
+document.getElementById('cartBtn').onclick=function(){document.getElementById('cartModal').style.display='flex';}
+document.getElementById('closeCart').onclick=function(){document.getElementById('cartModal').style.display='none';}
+function checkout(){alert('Checkout clicked!');}
+
+// FILTER PRODUCTS
+const categoryLinks=document.querySelectorAll('.dropdown-content a');
+categoryLinks.forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();const category=link.getAttribute('data-category');filterProducts(category);});});
+function filterProducts(category){const products=document.querySelectorAll('.product-card');products.forEach(card=>{category==='all'?card.classList.remove('hide'):card.dataset.category===category?card.classList.remove('hide'):card.classList.add('hide');});}
+
+// SLIDER
+const slider=document.getElementById('newArrivals');
+document.getElementById('prev').onclick=()=>{slider.scrollBy({left:-300,behavior:'smooth'});}
+document.getElementById('next').onclick=()=>{slider.scrollBy({left:300,behavior:'smooth'});}
+</script>
+</body>
+</html>
